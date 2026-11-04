@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Find Your Routine | SkinWise</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+
+<body class="routine-assessment">
+
+    <nav class="navbar">
+        <a href="/" class="logo">skinwise<span>.</span></a>
+        <a href="/" class="nav-link">Back to Home</a>
+    </nav>
+
+    <main class="routine-container">
+
+        <!-- INTRODUCTION -->
+
+        <section class="routine-header">
+
+            <p class="eyebrow">YOUR PERSONAL ROUTINE</p>
+
+            <h1>Let's understand your <span>skin.</span></h1>
+
+            <p>
+                Tell us about your skin and your concerns.
+                We'll create a simple morning and evening routine
+                designed around your needs.
+            </p>
+
+            <div class="progress-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <p class="progress-text">3 simple steps to your routine</p>
+
+        </section>
+
+
+        {% if error %}
+            <p class="form-error">{{ error }}</p>
+        {% endif %}
+
+
+        <form method="POST"
+              action="{{ url_for('find_your_routine') }}"
+              class="routine-form">
+
+
+            <!-- STEP 1: SKIN TYPE -->
+
+            <section class="routine-section">
+
+                <div class="section-heading">
+
+                    <span class="step-number">01</span>
+
+                    <div>
+                        <h2>Let's start with your skin type.</h2>
+                        <p>How would you like to provide your skin type?</p>
+                    </div>
+
+                </div>
+
+
+                <div class="skin-source-options">
+
+                    <label class="option-card">
+
+                        <input type="radio"
+                               name="skin_type_source"
+                               value="manual"
+                               {% if not saved_skin_type %}checked{% endif %}
+                               onclick="toggleSkinType(true)">
+
+                        <span class="option-content">
+                            <strong>I'll choose myself</strong>
+                            <small>Select your skin type manually.</small>
+                        </span>
+
+                    </label>
+
+
+                    <label class="option-card">
+
+                        <input type="radio"
+                               name="skin_type_source"
+                               value="saved"
+                               {% if saved_skin_type %}checked{% endif %}
+                               {% if not saved_skin_type %}disabled{% endif %}
+                               onclick="toggleSkinType(false)">
+
+                        <span class="option-content">
+
+                            <strong>Use my SkinWise result</strong>
+
+                            <small>
+                                {% if saved_skin_type %}
+                                    Your detected skin type: {{ saved_skin_type }}
+                                {% else %}
+                                    Complete Know Your Skin first.
+                                {% endif %}
+                            </small>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div id="manual-skin-type"
+                     {% if saved_skin_type %}style="display:none;"{% endif %}>
+
+                    <label for="skin_type" class="field-label">
+                        Select your skin type
+                    </label>
+
+                    <select name="skin_type"
+                            id="skin_type"
+                            {% if saved_skin_type %}disabled{% endif %}>
+
+                        <option value="Normal">Normal Skin</option>
+                        <option value="Oily">Oily Skin</option>
+                        <option value="Dry">Dry Skin</option>
+                        <option value="Combination">Combination Skin</option>
+
+                    </select>
+
+                </div>
+
+
+                <p class="form-hint">
+                    Haven't discovered your skin type?
+                    <a href="{{ url_for('assessment') }}">
+                        Explore your skin profile.
+                    </a>
+                </p>
+
+            </section>
+
+
+
+            <!-- STEP 2: SKIN CONCERNS -->
+
+            <section class="routine-section">
+
+                <div class="section-heading">
+
+                    <span class="step-number">02</span>
+
+                    <div>
+                        <h2>What would you like to improve?</h2>
+                        <p>Select all the concerns that apply to you.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="concern-grid">
+
+                    <label class="option-card concern-card">
+                        <input type="checkbox"
+                               name="concerns"
+                               value="Acne">
+
+                        <span class="option-content">
+                            <strong>Acne & Breakouts</strong>
+                            <small>Frequent pimples and blemishes</small>
+                        </span>
+                    </label>
+
+
+                    <label class="option-card concern-card">
+                        <input type="checkbox"
+                               name="concerns"
+                               value="Dullness">
+
+                        <span class="option-content">
+                            <strong>Dullness</strong>
+                            <small>Lack of glow and radiance</small>
+                        </span>
+                    </label>
+
+
+                    <label class="option-card concern-card">
+                        <input type="checkbox"
+                               name="concerns"
+                               value="Dark Spots">
+
+                        <span class="option-content">
+                            <strong>Dark Spots</strong>
+                            <small>Pimple marks and uneven tone</small>
+                        </span>
+                    </label>
+
+
+                    <label class="option-card concern-card">
+                        <input type="checkbox"
+                               name="concerns"
+                               value="Blackheads">
+
+                        <span class="option-content">
+                            <strong>Blackheads & Whiteheads</strong>
+                            <small>Clogged pores and bumps</small>
+                        </span>
+                    </label>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- STEP 3: SKIN SENSITIVITY -->
+
+            <section class="routine-section">
+
+                <div class="section-heading">
+
+                    <span class="step-number">03</span>
+
+                    <div>
+                        <h2>How does your skin react?</h2>
+                        <p>Is your skin sensitive to skincare products?</p>
+                    </div>
+
+                </div>
+
+
+                <div class="sensitivity-options">
+
+                    <label class="option-card">
+
+                        <input type="radio"
+                               name="sensitivity"
+                               value="Yes"
+                               required>
+
+                        <span class="option-content">
+                            <strong>Yes, my skin is sensitive</strong>
+                            <small>My skin often reacts or gets irritated.</small>
+                        </span>
+
+                    </label>
+
+
+                    <label class="option-card">
+
+                        <input type="radio"
+                               name="sensitivity"
+                               value="No"
+                               required>
+
+                        <span class="option-content">
+                            <strong>No, my skin is comfortable</strong>
+                            <small>My skin generally tolerates products well.</small>
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SUBMIT -->
+
+            <div class="routine-submit">
+
+                <p>Your personalised skincare journey starts here.</p>
+
+                <button type="submit" class="primary-button">
+                    Generate My Routine →
+                </button>
+
+            </div>
+
+        </form>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>skinwise. — Skincare, made personal.</p>
+    </footer>
+
+
+    <script>
+
+        function toggleSkinType(show) {
+
+            const manualSection =
+                document.getElementById("manual-skin-type");
+
+            const skinTypeSelect =
+                document.getElementById("skin_type");
+
+            manualSection.style.display = show ? "block" : "none";
+
+            skinTypeSelect.disabled = !show;
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Your Personal Routine | SkinWise</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+
+<body class="results-page">
+
+    <!-- NAVIGATION -->
+
+    <nav class="navbar">
+        <a href="/" class="logo">skinwise<span>.</span></a>
+        <a href="{{ url_for('find_your_routine') }}" class="nav-link">
+            Edit Routine
+        </a>
+    </nav>
+
+
+    <main class="results-container">
+
+        <!-- HERO -->
+
+        <section class="results-hero">
+
+            <p class="eyebrow">YOUR PERSONAL SKINCARE PLAN</p>
+
+            <h1>Your routine is ready<span>.</span></h1>
+
+            <p>
+                Thoughtfully created around your skin type,
+                concerns and individual needs.
+            </p>
+
+            <div class="hero-decoration">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+        </section>
+
+
+        <!-- SKIN PROFILE -->
+
+        <section class="profile-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">01 — YOUR SKIN PROFILE</p>
+                <h2>Getting to know your skin.</h2>
+                <p class="section-description">
+                    Here's what your personalised routine is based on.
+                </p>
+            </div>
+
+
+            <div class="profile-grid">
+
+                <div class="profile-card skin-type-card">
+                    <span class="profile-label">YOUR SKIN TYPE</span>
+
+                    <div class="profile-icon">✧</div>
+
+                    <h3>{{ skin_type }} Skin</h3>
+
+                    <p>Your starting point for personalised care.</p>
+                </div>
+
+
+                <div class="profile-card">
+                    <span class="profile-label">SKIN SENSITIVITY</span>
+
+                    <div class="profile-icon">♡</div>
+
+                    <h3>
+                        {% if sensitivity == "Yes" %}
+                            Sensitive
+                        {% else %}
+                            Not Sensitive
+                        {% endif %}
+                    </h3>
+
+                    <p>Your routine considers your skin's tolerance.</p>
+                </div>
+
+
+                <div class="profile-card concerns-profile-card">
+                    <span class="profile-label">YOUR SKIN CONCERNS</span>
+
+                    <div class="profile-icon">✿</div>
+
+                    <div class="concern-tags">
+                        {% for concern in concerns %}
+                            <span>{{ concern }}</span>
+                        {% else %}
+                            <span>General skincare</span>
+                        {% endfor %}
+                    </div>
+
+                    <p>Areas you would like to focus on.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DAILY ROUTINE -->
+
+        <section class="routine-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">02 — YOUR DAILY ESSENTIALS</p>
+                <h2>Your morning and evening rituals.</h2>
+                <p class="section-description">
+                    Follow these steps consistently to care for your skin.
+                </p>
+            </div>
+
+
+            <div class="routine-grid">
+
+                <!-- MORNING -->
+
+                <div class="routine-card morning-card">
+
+                    <div class="routine-card-top">
+                        <div class="routine-icon">☀</div>
+                        <span class="routine-time">DAYTIME CARE</span>
+                    </div>
+
+                    <p class="routine-label">YOUR MORNING ROUTINE</p>
+
+                    <h3>A fresh start.</h3>
+
+                    <p class="routine-description">
+                        Simple steps to care for and protect your skin
+                        throughout the day.
+                    </p>
+
+                    <ol class="routine-steps">
+
+                        {% for step in recommendations.morning_routine %}
+
+                            <li>
+                                <span class="routine-step-number">
+                                    {{ "%02d"|format(loop.index) }}
+                                </span>
+
+                                <span>{{ step }}</span>
+                            </li>
+
+                        {% else %}
+
+                            <li>No morning steps available.</li>
+
+                        {% endfor %}
+
+                    </ol>
+
+                </div>
+
+
+                <!-- EVENING -->
+
+                <div class="routine-card evening-card">
+
+                    <div class="routine-card-top">
+                        <div class="routine-icon">☾</div>
+                        <span class="routine-time">NIGHTTIME CARE</span>
+                    </div>
+
+                    <p class="routine-label">YOUR EVENING ROUTINE</p>
+
+                    <h3>Time to unwind.</h3>
+
+                    <p class="routine-description">
+                        A gentle evening routine to help you care
+                        for your skin at the end of the day.
+                    </p>
+
+                    <ol class="routine-steps">
+
+                        {% for step in recommendations.night_routine %}
+
+                            <li>
+                                <span class="routine-step-number">
+                                    {{ "%02d"|format(loop.index) }}
+                                </span>
+
+                                <span>{{ step }}</span>
+                            </li>
+
+                        {% else %}
+
+                            <li>No evening steps available.</li>
+
+                        {% endfor %}
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INGREDIENTS -->
+
+        <section class="ingredients-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">03 — INGREDIENT KNOWLEDGE</p>
+                <h2>Ingredients worth knowing.</h2>
+                <p class="section-description">
+                    Ingredients suggested for your skincare needs.
+                </p>
+            </div>
+
+
+            <div class="ingredient-panel">
+
+                <div class="ingredient-symbol">✧</div>
+
+                <div class="ingredient-content">
+
+                    <p class="ingredient-intro">
+                        YOUR INGREDIENT GUIDE
+                    </p>
+
+                    <div class="ingredient-list">
+
+                        {% for ingredient in recommendations.ingredients %}
+
+                            <span class="ingredient-tag">
+                                {{ ingredient }}
+                            </span>
+
+                        {% else %}
+
+                            <p>
+                                Focus on a gentle and consistent basic routine.
+                            </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PERSONAL GUIDANCE -->
+
+        <section class="tips-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">04 — A LITTLE SKINWISE GUIDANCE</p>
+                <h2>Little things that matter.</h2>
+            </div>
+
+
+            <div class="tips-card">
+
+                <div class="tips-icon">♡</div>
+
+                <div class="tips-content">
+
+                    <h3>Keep your skincare journey simple.</h3>
+
+                    <ul>
+                        {% for note in recommendations.notes %}
+                            <li>{{ note }}</li>
+                        {% else %}
+                            <li>Introduce new products gradually.</li>
+                            <li>Patch test new products before regular use.</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CLOSING -->
+
+        <section class="results-closing">
+
+            <p class="eyebrow">A NOTE FROM SKINWISE</p>
+
+            <h2>Consistency is your best skincare companion.</h2>
+
+            <p>
+                Give your routine time, listen to your skin,
+                and introduce new products gradually.
+            </p>
+
+            <a href="{{ url_for('find_your_routine') }}"
+               class="primary-button">
+                Create Another Routine →
+            </a>
+            <div class="next-step-section">
+
+    <h2>Ready for the next step?</h2>
+
+    <p>
+        Now that you know your skin type and routine,
+        discover products that match your skincare needs
+        and budget.
+    </p>
+
+    <a href="{{ url_for('find_products') }}" class="next-step-button">
+        Find My Products →
+    </a>
+
+</div>
+
+            <a href="{{ url_for('home') }}" class="back-home-link">
+                Back to SkinWise Home
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>skinwise. — Skincare, made personal.</p>
+    </footer>
+
+</body>
+</html>

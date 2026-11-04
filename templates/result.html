@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Your SkinWise Results</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="results-page">
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="logo">skinwise<span>.</span></a>
+        <a href="/assessment" class="nav-link">Retake Assessment ↗</a>
+    </nav>
+
+    <main class="results-container">
+
+        <!-- Welcome heading -->
+        <section class="results-hero">
+            <p class="eyebrow">YOUR PERSONAL SKINCARE REPORT</p>
+
+            <h1>Your skin, <span>understood.</span></h1>
+
+            <p>
+                A thoughtful routine created around your skin,
+                your concerns and your preferences.
+            </p>
+        </section>
+
+
+        <!-- Skin profile -->
+        <section class="profile-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">YOUR PROFILE</p>
+                <h2>Getting to know your skin.</h2>
+            </div>
+
+            <div class="profile-grid">
+
+                <div class="profile-card">
+                    <span>SKIN TYPE</span>
+                    <h3>{{ skin_type }}</h3>
+                </div>
+
+                <div class="profile-card">
+                    <span>SKIN SENSITIVITY</span>
+                    <h3>{{ sensitivity }}</h3>
+                </div>
+
+                <div class="profile-card">
+                    <span>PRODUCT BUDGET</span>
+                    <h3>₹{{ budget }}</h3>
+                </div>
+
+                <div class="profile-card">
+                    <span>YOUR CONCERNS</span>
+
+                    <div class="concern-tags">
+                        {% for concern in concerns %}
+                            <span>{{ concern }}</span>
+                        {% else %}
+                            <span>General skincare</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Daily routine -->
+        <section class="routine-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">YOUR DAILY ESSENTIALS</p>
+                <h2>A routine made for you.</h2>
+                <p>Keep things simple and consistent.</p>
+            </div>
+
+            <div class="routine-grid">
+
+                <div class="routine-card">
+                    <div class="routine-icon">☀</div>
+                    <p class="routine-label">YOUR MORNING ROUTINE</p>
+                    <h3>Start your day gently.</h3>
+
+                    <ol>
+                        {% for step in recommendations.morning_routine %}
+                            <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+                <div class="routine-card evening-card">
+                    <div class="routine-icon">☾</div>
+                    <p class="routine-label">YOUR EVENING ROUTINE</p>
+                    <h3>Wind down and care.</h3>
+
+                    <ol>
+                        {% for step in recommendations.night_routine %}
+                            <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Ingredients -->
+        <section class="ingredients-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">INGREDIENT KNOWLEDGE</p>
+                <h2>Ingredients to explore.</h2>
+                <p>Ingredients suggested by your selected skin profile.</p>
+            </div>
+
+            <div class="ingredient-list">
+                {% for ingredient in recommendations.ingredients %}
+                    <span class="ingredient-tag">{{ ingredient }}</span>
+                {% else %}
+                    <p>No specific ingredients were selected. Focus on a gentle basic routine.</p>
+                {% endfor %}
+            </div>
+
+        </section>
+
+
+        <!-- Products -->
+        <section class="products-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">THOUGHTFULLY SELECTED</p>
+                <h2>Products selected for you.</h2>
+                <p>Options matched to your preferences and budget.</p>
+            </div>
+
+
+            <!-- Budget summary -->
+            <div class="budget-summary">
+
+                <h3>Your Routine Budget</h3>
+
+                <p>Selected budget: ₹{{ product_plan.budget }}</p>
+
+                <p>Total product cost: ₹{{ product_plan.total }}</p>
+
+                <p>Remaining budget: ₹{{ product_plan.remaining }}</p>
+
+                {% if product_plan.missing_steps %}
+                    <p>
+                        Could not fit these essential steps within your budget:
+                        {{ product_plan.missing_steps | join(", ") }}
+                    </p>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Product cards -->
+            <div class="product-container">
+
+                {% for product in product_plan.products %}
+
+                    <article class="product-card">
+
+                        {% if product.image_url %}
+                            <img
+                                src="{{ product.image_url }}"
+                                alt="{{ product.name }}"
+                                class="product-image"
+                            >
+                        {% endif %}
+
+                        <p class="product-category">
+                            {{ product.category }}
+                        </p>
+
+                        <h3>{{ product.name }}</h3>
+
+                        {% if product.brand %}
+                            <p class="product-brand">
+                                By {{ product.brand }}
+                            </p>
+                        {% endif %}
+
+                        <p class="product-description">
+                            {{ product.description }}
+                        </p>
+
+                        <p class="product-price">
+                            ₹{{ product.price }}
+                        </p>
+
+                        {% if product.product_url %}
+                            <a
+                                href="{{ product.product_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="shop-button"
+                            >
+                                Shop Now →
+                            </a>
+                        {% endif %}
+
+                    </article>
+
+                {% else %}
+
+                    <p class="no-products">
+                        No matching products were found within your selected criteria.
+                        Try adjusting your budget or assessment answers.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        <!-- Personalised tips -->
+        <section class="tips-section">
+
+            <div class="results-section-heading">
+                <p class="eyebrow">A LITTLE PERSONAL GUIDANCE</p>
+                <h2>Things to keep in mind.</h2>
+            </div>
+
+            <div class="tips-card">
+
+                <ul>
+                    {% for note in recommendations.notes %}
+                        <li>{{ note }}</li>
+                    {% endfor %}
+                </ul>
+
+                <p class="budget-message">
+                    {{ recommendations.budget_message }}
+                </p>
+
+            </div>
+        </section>
+
+
+        <!-- Closing -->
+        <section class="results-closing">
+
+            <h2>Consistency is your best skincare companion.</h2>
+
+            <p>
+                Keep your routine simple, give products time
+                and patch test new products.
+            </p>
+
+            <a href="/assessment" class="primary-button">
+                Update My Skin Profile →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <a href="/" class="logo">skinwise<span>.</span></a>
+        <p>Skincare made thoughtful. © 2026 SkinWise.</p>
+    </footer>
+
+</body>
+</html>

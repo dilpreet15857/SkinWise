@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skin Assessment | SkinWise</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+    rel="stylesheet">
+    
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="logo">skinwise.</a>
+        <a href="/" class="nav-link">Back to Home</a>
+    </nav>
+
+
+    <!-- Assessment Heading -->
+    <section class="intro">
+        <p class="eyebrow">YOUR SKIN JOURNEY STARTS HERE</p>
+
+        <h1>Let's understand your skin.</h1>
+
+        <p>
+            Every skin is different. Tell us a little about yours
+            so we can help you build a routine that feels right.
+        </p>
+    </section>
+
+
+    <!-- Assessment Form -->
+    <section class="assessment-section">
+
+        <form action="/assessment" method="POST" class="assessment-form">
+
+            
+<!-- QUESTION 1 -->
+<div class="form-group">
+    <h2>01. How does your skin feel after washing your face?</h2>
+    <p>Imagine you haven't applied any skincare products.</p>
+
+    <label><input type="radio" name="q1" value="Dry" required>
+        Tight or stretched
+    </label>
+
+    <label><input type="radio" name="q1" value="Normal">
+        Comfortable and balanced
+    </label>
+
+    <label><input type="radio" name="q1" value="Oily">
+        Slightly oily
+    </label>
+
+    <label><input type="radio" name="q1" value="Combination">
+        Oily around my forehead, nose and chin
+    </label>
+</div>
+
+
+<!-- QUESTION 2 -->
+<div class="form-group">
+    <h2>02. How does your skin look after a few hours?</h2>
+
+    <label><input type="radio" name="q2" value="Oily" required>
+        Shiny all over my face
+    </label>
+
+    <label><input type="radio" name="q2" value="Combination">
+        Shiny only around my forehead, nose and chin
+    </label>
+
+    <label><input type="radio" name="q2" value="Normal">
+        Mostly normal, without much shine
+    </label>
+
+    <label><input type="radio" name="q2" value="Dry">
+        Dry or flaky in some areas
+    </label>
+</div>
+
+
+<!-- QUESTION 3 -->
+<div class="form-group">
+    <h2>03. How would you describe your pores?</h2>
+
+    <label><input type="radio" name="q3" value="Normal" required>
+        Small and barely visible
+    </label>
+
+    <label><input type="radio" name="q3" value="Combination">
+        Noticeable around my nose
+    </label>
+
+    <label><input type="radio" name="q3" value="Oily">
+        Visible on most areas of my face
+    </label>
+
+    <label><input type="radio" name="q3" value="Combination">
+        Different in different areas
+    </label>
+</div>
+
+
+<!-- QUESTION 4 -->
+<div class="form-group">
+    <h2>04. How often does your skin feel dry or flaky?</h2>
+
+    <label><input type="radio" name="q4" value="Dry" required>
+        Very often
+    </label>
+
+    <label><input type="radio" name="q4" value="Combination">
+        Sometimes, especially on my cheeks
+    </label>
+
+    <label><input type="radio" name="q4" value="Normal">
+        Rarely
+    </label>
+
+    <label><input type="radio" name="q4" value="Oily">
+        Almost never
+    </label>
+</div>
+
+
+<!-- QUESTION 5 -->
+<div class="form-group">
+    <h2>05. How does your skin usually feel by the end of the day?</h2>
+
+    <label><input type="radio" name="q5" value="Oily" required>
+        Very oily and greasy
+    </label>
+
+    <label><input type="radio" name="q5" value="Combination">
+        Oily in some areas but normal or dry elsewhere
+    </label>
+
+    <label><input type="radio" name="q5" value="Normal">
+        Comfortable and balanced
+    </label>
+
+    <label><input type="radio" name="q5" value="Dry">
+        Dry, tight or uncomfortable
+    </label>
+</div>
+
+           
+
+
+           
+
+         
+
+            <!-- Submit -->
+            <button type="submit" class="assessment-button">
+                Generate My Skin Profile
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>skinwise. — Skincare, made personal.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Find Your Products | SkinWise</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="product-finder-page">
+
+    <nav class="pf-navbar">
+        <a href="{{ url_for('home') }}" class="pf-logo">
+            SkinWise<span>.</span>
+        </a>
+
+        <a href="{{ url_for('home') }}" class="pf-home-link">
+            Home
+        </a>
+    </nav>
+
+    <main class="pf-main">
+
+        <section class="pf-intro">
+            <span class="pf-eyebrow">YOUR SKINCARE, SIMPLIFIED</span>
+
+            <h1>Find products that <em>love your skin.</em></h1>
+
+            <p>
+                Tell us a little about your skin and your budget.
+                We'll find products that suit your needs.
+            </p>
+        </section>
+
+        <section class="pf-form-card">
+
+            <div class="pf-form-heading">
+                <span class="pf-step">PERSONALISED PRODUCT FINDER</span>
+                <h2>Let's get to know your skin</h2>
+                <p>Just three quick details to get started.</p>
+            </div>
+
+            {% if error %}
+                <div class="pf-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST"
+                  action="{{ url_for('find_products') }}">
+
+                <!-- SKIN TYPE -->
+
+                <div class="pf-question">
+
+                    <span class="pf-number">01</span>
+
+                    <div class="pf-question-content">
+                        <h3>What is your skin type?</h3>
+
+                        <p>
+                            Choose your previous SkinWise result
+                            or select your skin type manually.
+                        </p>
+
+                        <div class="pf-choice-card">
+
+                            {% if saved_skin_type %}
+
+                                <label class="pf-radio-option">
+                                    <input
+                                        type="radio"
+                                        name="details_source"
+                                        value="saved"
+                                        checked
+                                    >
+
+                                    <span>
+                                        <strong>Use my SkinWise assessment</strong>
+                                        <small>
+                                            Your saved result:
+                                            {{ saved_skin_type }} skin
+                                        </small>
+                                    </span>
+                                </label>
+
+                            {% endif %}
+
+                            <label class="pf-radio-option">
+                                <input
+                                    type="radio"
+                                    name="details_source"
+                                    value="manual"
+                                    {% if not saved_skin_type %}checked{% endif %}
+                                >
+
+                                <span>
+                                    <strong>Select my skin type manually</strong>
+                                    <small>Choose from the options below.</small>
+                                </span>
+                            </label>
+
+                        </div>
+
+                        <select name="skin_type" class="pf-select">
+                            <option value="">Select your skin type</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Oily">Oily</option>
+                            <option value="Dry">Dry</option>
+                            <option value="Combination">Combination</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="pf-divider"></div>
+
+                <!-- MAIN CONCERN -->
+
+                <div class="pf-question">
+
+                    <span class="pf-number">02</span>
+
+                    <div class="pf-question-content">
+
+                        <h3>What is your main skin concern?</h3>
+
+                        <p>
+                            Select the one concern you'd most like
+                            your skincare products to address.
+                        </p>
+
+                        <div class="pf-concern-grid">
+
+                            {% for concern in ["Acne", "Dullness", "Dark Spots", "Blackheads"] %}
+
+                                <label class="pf-concern-option">
+                                    <input
+                                        type="radio"
+                                        name="main_concern"
+                                        value="{{ concern }}"
+                                        required
+                                    >
+
+                                    <span>{{ concern }}</span>
+                                </label>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="pf-divider"></div>
+
+                <!-- BUDGET -->
+
+                <div class="pf-question">
+
+                    <span class="pf-number">03</span>
+
+                    <div class="pf-question-content">
+
+                        <h3>What's your total budget?</h3>
+
+                        <p>
+                            Set the maximum amount you want to spend
+                            on all recommended products.
+                        </p>
+
+                        <div class="pf-budget-input">
+                            <span>₹</span>
+
+                            <input
+                                type="number"
+                                name="budget"
+                                min="1"
+                                placeholder="Enter your budget"
+                                required
+                            >
+                        </div>
+
+                        <small class="pf-budget-note">
+                            Your recommended product total will not
+                            exceed this budget.
+                        </small>
+
+                    </div>
+                </div>
+
+                <button type="submit" class="pf-submit">
+                    Find My Products
+                    <span>→</span>
+                </button>
+
+                <p class="pf-footer-note">
+                    Thoughtful skincare choices, made simple.
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

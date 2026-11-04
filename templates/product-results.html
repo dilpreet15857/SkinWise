@@ -1,0 +1,328 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Your Product Picks | SkinWise</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap"
+          rel="stylesheet">
+</head>
+
+<body class="product-results-body">
+
+    <main class="pr-page">
+
+        <div class="pr-container">
+
+            <!-- INTRODUCTION -->
+            <header class="pr-heading">
+
+                <p class="pr-eyebrow">
+                    SKINWISE · YOUR PERSONAL SELECTION
+                </p>
+
+                <h1>
+                    Your skincare,<br>
+                    <span>thoughtfully chosen.</span>
+                </h1>
+
+                <p>
+                    Products selected around your skin type,
+                    skincare concern and budget.
+                </p>
+
+            </header>
+
+
+            <!-- SKIN PROFILE -->
+            <section class="pr-profile">
+
+                <div>
+                    <p class="pr-label">YOUR SKIN TYPE</p>
+                    <h2>{{ skin_type }}</h2>
+                </div>
+
+                <div>
+                    <p class="pr-label">MAIN CONCERN</p>
+                    <h2>
+                        {{ concerns | join(", ") if concerns else "Not specified" }}
+                    </h2>
+                </div>
+
+                <div>
+                    <p class="pr-label">SENSITIVITY</p>
+                    <h2>{{ sensitivity }}</h2>
+                </div>
+
+            </section>
+
+
+            <!-- BUDGET SUMMARY -->
+            <section class="pr-budget">
+
+                <div class="pr-budget-heading">
+
+                    <div>
+                        <p class="pr-eyebrow">YOUR SPENDING PLAN</p>
+                        <h2>Your budget at a glance</h2>
+                    </div>
+
+                    <span class="pr-budget-icon">₹</span>
+
+                </div>
+
+
+                <div class="pr-budget-grid">
+
+                    <div class="pr-budget-item">
+                        <p>Total Budget</p>
+                        <h3>₹{{ product_plan.budget }}</h3>
+                    </div>
+
+                    <div class="pr-budget-item">
+                        <p>Selected Products</p>
+                        <h3>₹{{ product_plan.total }}</h3>
+                    </div>
+
+                    <div class="pr-budget-item pr-remaining">
+                        <p>Remaining</p>
+                        <h3>₹{{ product_plan.remaining }}</h3>
+                    </div>
+
+                </div>
+
+
+                <!-- BUDGET PROGRESS BAR -->
+                {% if product_plan.budget and product_plan.budget > 0 %}
+
+                    {% set percentage = (product_plan.total / product_plan.budget * 100)|round(1) %}
+
+                    <div class="pr-progress-track">
+                        <div class="pr-progress-fill"
+                             style="width: {{ [percentage, 100]|min }}%;">
+                        </div>
+                    </div>
+
+                    <p class="pr-progress-note">
+                        {{ percentage|int }}% of your budget allocated
+                    </p>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- PRODUCT RECOMMENDATIONS -->
+            <section class="pr-products-section">
+
+                <div class="pr-section-heading">
+
+                    <div>
+                        <p class="pr-eyebrow">CURATED FOR YOUR SKIN</p>
+                        <h2>Your recommended products</h2>
+                    </div>
+
+                    <span class="pr-count">
+                        {{ product_plan.products|length }} products
+                    </span>
+
+                </div>
+
+
+                {% if product_plan.products %}
+
+                    <div class="pr-product-grid">
+
+                        {% for product in product_plan.products %}
+
+                            <article class="pr-product-card">
+
+                                <!-- PRODUCT IMAGE -->
+                                <div class="pr-image-wrap">
+
+                                    {% if product.image_url %}
+
+                                        <img src="{{ product.image_url }}"
+                                             alt="{{ product.name }}"
+                                             class="pr-product-image">
+
+                                    {% else %}
+
+                                        <div class="pr-image-placeholder">
+                                            <span>skinwise.</span>
+                                        </div>
+
+                                    {% endif %}
+
+                                    <span class="pr-category">
+                                        {{ product.category }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- PRODUCT INFORMATION -->
+                                <div class="pr-product-info">
+
+                                    <p class="pr-brand">
+                                        {{ product.brand }}
+                                    </p>
+
+                                    <h3>
+                                        {{ product.name }}
+                                    </h3>
+
+
+                                    <!-- PRODUCT RATING -->
+                                    {% if product.rating %}
+
+                                        <div class="pr-rating">
+
+                                            <span>★</span>
+                                            {{ product.rating }}/5
+
+                                            {% if product.review_count %}
+                                                <small>
+                                                    ({{ product.review_count }} reviews)
+                                                </small>
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <p class="pr-rating-unavailable">
+                                            Rating not available
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    <!-- PRODUCT DESCRIPTION -->
+                                    <p class="pr-description">
+                                        {{ product.description }}
+                                    </p>
+
+
+                                    <!-- PRICE AND BUY BUTTON -->
+                                    <div class="pr-product-bottom">
+
+                                        <h4>
+                                            ₹{{ product.price }}
+                                        </h4>
+
+                                        {% if product.product_url %}
+
+                                            <a href="{{ product.product_url }}"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="pr-buy-button">
+                                                Buy Now ↗
+                                            </a>
+
+                                        {% else %}
+
+                                            <span class="pr-no-link">
+                                                Link unavailable
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                {% else %}
+
+                    <!-- NO PRODUCTS FOUND -->
+                    <div class="pr-empty">
+
+                        <h3>Let's find a better match.</h3>
+
+                        <p>
+                            We couldn't find products within this budget.
+                            Try increasing your budget to explore more options.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- MISSING ESSENTIAL STEPS -->
+            {% if product_plan.missing_steps %}
+
+                <section class="pr-missing">
+
+                    <h2>A little more to complete your routine</h2>
+
+                    <p>
+                        These essential skincare steps could not
+                        be included within your current budget:
+                    </p>
+
+                    <div class="pr-missing-list">
+
+                        {% for step in product_plan.missing_steps %}
+
+                            <span>{{ step }}</span>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+            {% endif %}
+
+
+            <!-- NOTE -->
+            <p class="pr-note">
+
+                Product prices and ratings may change.
+                Please verify the latest price, rating and product details
+                on the seller's website before purchasing.
+
+            </p>
+
+
+            <!-- NAVIGATION -->
+            <div class="pr-navigation">
+
+                <a href="{{ url_for('find_products') }}"
+                   class="pr-secondary-button">
+                    ← Find Products Again
+                </a>
+
+                <a href="{{ url_for('home') }}"
+                   class="pr-home-link">
+                    Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
+```

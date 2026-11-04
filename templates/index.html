@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SkinWise | Your Skin, Your Story</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header class="navbar">
+        <a href="{{ url_for('home') }}" class="logo">
+            skinwise<span>.</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="#about">Our Philosophy</a>
+            <a href="#explore">Explore</a>
+        </nav>
+
+       
+    </header>
+
+
+    <main>
+
+        <!-- HERO SECTION -->
+        
+<section class="home-hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <span class="hero-tagline">
+            SMART SKINCARE. SIMPLIFIED.
+        </span>
+
+        <h1>Discover Your Skin's Natural Glow</h1>
+
+        <p>
+            Personalised skincare recommendations
+            designed around your unique skin.
+        </p>
+
+
+                    <a href="#explore" class="hero-button">
+    Discover Your Skin <span>→</span>
+</a>
+                </div>
+
+                <p class="hero-side-text">
+                    UNDERSTAND · DISCOVER · CARE
+                </p>
+            </div>
+
+        </section>
+
+
+       
+
+
+        <!-- EXPLORE SECTION -->
+        <section class="explore" id="explore">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR SKINCARE JOURNEY</p>
+                    <h2>Made around <span>you.</span></h2>
+                </div>
+
+                <p>
+                    Three simple steps towards understanding
+                    and caring for your skin.
+                </p>
+            </div>
+
+
+            <div class="feature-grid">
+
+                <!-- CARD 1 -->
+                <article class="feature-card">
+                    <div class="feature-image">
+                        <img
+                            
+      src="{{ url_for('static', filename='images/know-skin.jpg') }}"
+    alt="Skincare products">
+                        <span class="image-number">01</span>
+                    </div>
+
+                    <div class="feature-info">
+                        <p class="eyebrow">START WITH YOURSELF</p>
+                        <h3>Know Your Skin</h3>
+
+                        <p>
+                            Answer a few simple questions and discover
+                            your likely skin type through our
+                            personalised skin assessment.
+                        </p>
+
+                        <a href="{{ url_for('assessment') }}"
+                           class="text-link">
+                            Discover your skin ↗
+                        </a>
+                    </div>
+                </article>
+
+
+                <!-- CARD 2 -->
+                <article class="feature-card">
+                    <div class="feature-image">
+                        <img
+                            src="{{ url_for('static', filename='images/skin-assessment.jpg') }}"
+                            alt="Skincare routine">
+                        <span class="image-number">02</span>
+                    </div>
+
+                    <div class="feature-info">
+                        <p class="eyebrow">A ROUTINE THAT FITS</p>
+                        <h3>Find Your Routine</h3>
+
+                        <p>
+    Discover a personalised morning and evening
+    skincare routine based on your skin type,
+    concerns and sensitivity.
+</p>
+
+                       <a href="{{ url_for('find_your_routine') }}"
+   class="text-link">
+    Explore ↗
+</a>
+                    </div>
+                </article>
+
+
+               
+<!-- CARD 3 -->
+<article class="feature-card">
+    <div class="feature-image">
+        <img
+           src="{{ url_for('static', filename='images/know-products.jpg') }}"
+            alt="Skincare serum and products">
+        <span class="image-number">03</span>
+    </div>
+
+    <div class="feature-info">
+        <p class="eyebrow">YOUR SKINCARE, YOUR BUDGET</p>
+
+        <h3>Find Your Products</h3>
+
+        <p>
+            Discover skincare products selected according
+            to your skin type, main concern and budget.
+            Find products that work for your needs.
+        </p>
+
+       <a href="{{ url_for('find_products') }}"
+   class="text-link">
+    Explore ↗
+</a>
+    </div>
+</article>
+            </div>  <!-- closes feature-grid -->
+        </section>  <!-- closes explore section -->
+
+
+     
+
+
+        <!-- CLOSING SECTION -->
+        <section class="closing">
+            <p class="eyebrow">YOUR JOURNEY STARTS HERE</p>
+
+            <h2>
+                Let's get to know<br>
+                <span>your skin.</span>
+            </h2>
+
+           <p>
+    Understand your skin, build your personalised routine
+    and discover products that fit your needs and budget.
+</p>
+
+            <a href="{{ url_for('assessment') }}"
+               class="primary-button">
+                Take the Skin Assessment →
+            </a>
+        </section>
+
+    </main>
+
+ <!-- PHILOSOPHY SECTION -->
+<section class="philosophy" id="about">
+
+    <!-- LEFT SIDE: TEXT -->
+    <div class="philosophy-content">
+
+        <p class="eyebrow">A NEW WAY TO THINK ABOUT SKINCARE</p>
+
+        <h2>
+            Good skincare begins<br>
+            with <span>knowing your skin.</span>
+        </h2>
+
+        <p>
+            No complicated routines. No unnecessary guesswork.
+            Just a better understanding of your skin, the
+            ingredients it needs and the products that
+            fit your everyday life.
+        </p>
+
+    </div>
+
+    <!-- RIGHT SIDE: IMAGE -->
+    <div class="philosophy-image">
+
+        <img
+            src="{{ url_for('static', filename='images/philosophy-new.jpg') }}"
+            alt="Minimal skincare products">
+
+        <span>THE ART OF SIMPLE SKINCARE</span>
+
+    </div>
+
+</section>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <a href="{{ url_for('home') }}" class="logo">
+            skinwise<span>.</span>
+        </a>
+
+        <p>Understand your skin. Care for it thoughtfully.</p>
+
+        <span>© 2026 SkinWise. All rights reserved.</span>
+    </footer>
+
+</body>
+</html>
