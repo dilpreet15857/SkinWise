@@ -1,3 +1,7 @@
+<img width="1895" height="901" alt="Screenshot 2026-11-10 105133" src="https://github.com/user-attachments/assets/e6ae8285-30d4-43f2-aedf-7c1b1baacc15" />
+<img width="1890" height="895" alt="Screenshot 2026-11-10 105309" src="https://github.com/user-attachments/assets/ad403ca5-1799-452d-8940-eec0c14e17a2" />
+<img width="1892" height="910" alt="Screenshot 2026-11-10 105239" src="https://github.com/user-attachments/assets/71111b66-002a-4fca-8ec5-06aab826fdf7" />
+
 # SkinWise
 An intelligent skincare recommendation platform that helps users understand their skin type, discover personalised skincare routines, and find suitable products based on their skin concerns and budget.
 
