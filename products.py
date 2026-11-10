@@ -570,11 +570,18 @@ for product in products:
     product.setdefault("review_count", None)
 
 
+
 # =====================================================
 # PRODUCT RECOMMENDATION FUNCTION
 # =====================================================
 
-def recommend_products(skin_type, concerns, sensitivity, budget):
+def recommend_products(
+    skin_type,
+    concerns,
+    sensitivity,
+    budget,
+    preferred_brands=None
+):
 
     budget = int(budget)
 
@@ -582,7 +589,38 @@ def recommend_products(skin_type, concerns, sensitivity, budget):
     missing_steps = []
     total = 0
 
-    # Essential steps are prioritised
+    # Normalise brand preferences
+    preferred_brands = preferred_brands or []
+
+    preferred_brands = [
+        brand.strip().lower()
+        for brand in preferred_brands
+    ]
+
+    # "All brands" means no brand restriction
+    all_brands = (
+        not preferred_brands
+        or "all brands" in preferred_brands
+    )
+
+    # Filter products according to user preferences
+    eligible_products = [
+        product for product in products
+
+        if (
+            all_brands
+            or product["brand"].lower() in preferred_brands
+        )
+
+        and skin_type in product["skin_types"]
+
+        and (
+            sensitivity != "Yes"
+            or product["suitable_for_sensitive_skin"]
+        )
+    ]
+
+    # Essential skincare steps
     essential_categories = [
         "Cleanser",
         "Moisturiser",
@@ -592,13 +630,8 @@ def recommend_products(skin_type, concerns, sensitivity, budget):
     for category in essential_categories:
 
         suitable = [
-            product for product in products
+            product for product in eligible_products
             if product["category"] == category
-            and skin_type in product["skin_types"]
-            and (
-                sensitivity != "Yes"
-                or product["suitable_for_sensitive_skin"]
-            )
         ]
 
         suitable.sort(key=lambda product: product["price"])
@@ -611,20 +644,17 @@ def recommend_products(skin_type, concerns, sensitivity, budget):
         else:
             missing_steps.append(category)
 
-    # Optional steps are added only if budget allows
+    # Optional skincare steps
     for category in ["Serum", "Toner"]:
 
         suitable = [
-            product for product in products
+            product for product in eligible_products
+
             if product["category"] == category
-            and skin_type in product["skin_types"]
+
             and any(
                 concern in product["concerns"]
                 for concern in concerns
-            )
-            and (
-                sensitivity != "Yes"
-                or product["suitable_for_sensitive_skin"]
             )
         ]
 
@@ -640,5 +670,6 @@ def recommend_products(skin_type, concerns, sensitivity, budget):
         "total": total,
         "budget": budget,
         "remaining": budget - total,
-        "missing_steps": missing_steps
+        "missing_steps": missing_steps,
+        "preferred_brands": preferred_brands
     }

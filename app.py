@@ -1,8 +1,17 @@
 
-from flask import Flask, render_template, request, session, redirect, url_for
+import os
+
+from flask import Flask, render_template, request, session
 
 from recommendation import generate_recommendation
 from products import recommend_products
+
+
+app = Flask(__name__)
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "skinwise_local_dev_key"
+)
 
 
 def calculate_skin_type(answers):
@@ -15,17 +24,10 @@ def calculate_skin_type(answers):
     }
 
     for answer in answers:
-        scores[answer] += 1
+        if answer in scores:
+            scores[answer] += 1
 
-    skin_type = max(scores, key=scores.get)
-
-    return skin_type
-
-
-import os
-
-app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "skinwise_local_dev_key")
+    return max(scores, key=scores.get)
 
 
 @app.route("/")
@@ -33,14 +35,15 @@ def home():
     return render_template("index.html")
 
 
-# Know Your Skin assessment
+# ----------------------------------
+# KNOW YOUR SKIN ASSESSMENT
+# ----------------------------------
 
 @app.route("/assessment", methods=["GET", "POST"])
 def assessment():
 
     if request.method == "POST":
 
-        # Collect answers to the five skin-type questions
         answers = [
             request.form.get("q1"),
             request.form.get("q2"),
@@ -49,13 +52,18 @@ def assessment():
             request.form.get("q5")
         ]
 
-        # Determine the skin type
+        if any(answer not in [
+            "Normal", "Oily", "Dry", "Combination"
+        ] for answer in answers):
+            return render_template(
+                "assessment.html",
+                error="Please answer all five questions."
+            )
+
         skin_type = calculate_skin_type(answers)
 
-        # Save it for future use
         session["skin_type"] = skin_type
 
-        # Show the skin type result
         return render_template(
             "skin-result.html",
             skin_type=skin_type
@@ -64,7 +72,9 @@ def assessment():
     return render_template("assessment.html")
 
 
-# Independent Find Your Routine tool
+# ----------------------------------
+# FIND YOUR ROUTINE
+# ----------------------------------
 
 @app.route("/find-your-routine", methods=["GET", "POST"])
 def find_your_routine():
@@ -77,37 +87,40 @@ def find_your_routine():
         skin_type_source = request.form.get("skin_type_source")
 
         if skin_type_source == "saved":
-
             skin_type = session.get("skin_type")
 
             if not skin_type:
                 error = (
                     "You haven't completed Know Your Skin yet. "
-                    "Please select your skin type manually or complete "
-                    "the questionnaire."
+                    "Please select your skin type manually."
                 )
-
         else:
             skin_type = request.form.get("skin_type")
+
+        if not error:
+
+            if skin_type not in [
+                "Normal", "Oily", "Dry", "Combination"
+            ]:
+                error = "Please select a valid skin type."
 
         if not error:
 
             concerns = request.form.getlist("concerns")
             sensitivity = request.form.get("sensitivity")
 
-            # Generate the personalised routine
             recommendations = generate_recommendation(
-                skin_type, concerns, sensitivity
+                skin_type,
+                concerns,
+                sensitivity
             )
 
-            # Save all routine assessment details for future use
             session["skin_type"] = skin_type
             session["concerns"] = concerns
             session["sensitivity"] = sensitivity
 
             return render_template(
                 "routine-result.html",
-                
                 skin_type=skin_type,
                 concerns=concerns,
                 sensitivity=sensitivity,
@@ -120,10 +133,10 @@ def find_your_routine():
         error=error
     )
 
-# Independent Find Your Products tool
 
-
-# Independent Find Your Products tool
+# ----------------------------------
+# FIND YOUR PRODUCTS
+# ----------------------------------
 
 @app.route("/find-products", methods=["GET", "POST"])
 def find_products():
@@ -133,31 +146,36 @@ def find_products():
 
     if request.method == "POST":
 
-        # Choose saved or manually entered skin type
         details_source = request.form.get("details_source")
 
         if details_source == "saved":
             skin_type = session.get("skin_type")
 
             if not skin_type:
-                error = "No previous skin assessment found. Please select your skin type manually."
-
+                error = (
+                    "No previous skin assessment found. "
+                    "Please select your skin type manually."
+                )
         else:
             skin_type = request.form.get("skin_type")
 
-        # Only one main concern is selected
         main_concern = request.form.get("main_concern")
-
-        # Get total budget
         budget = request.form.get("budget")
 
-        # Validate the submitted details
+        preferred_brands = request.form.getlist(
+            "preferred_brands"
+        )
+
         if not error:
 
-            if skin_type not in ["Normal", "Oily", "Dry", "Combination"]:
+            if skin_type not in [
+                "Normal", "Oily", "Dry", "Combination"
+            ]:
                 error = "Please select a valid skin type."
 
-            elif main_concern not in ["Acne", "Dullness", "Dark Spots", "Blackheads"]:
+            elif main_concern not in [
+                "Acne", "Dullness", "Dark Spots", "Blackheads"
+            ]:
                 error = "Please select your main skin concern."
 
             elif not budget or not budget.isdigit() or int(budget) <= 0:
@@ -166,21 +184,19 @@ def find_products():
         if not error:
 
             budget = int(budget)
-
-            # Convert the single concern into a list
             concerns = [main_concern]
 
-            # Generate product recommendations.
-            # Sensitivity is not asked in this questionnaire.
             recommended_products = recommend_products(
                 skin_type,
                 concerns,
                 None,
-                budget
+                budget,
+                preferred_brands=preferred_brands
             )
 
-            # Save the skin type for future use
             session["skin_type"] = skin_type
+            session["concerns"] = concerns
+            session["preferred_brands"] = preferred_brands
 
             return render_template(
                 "product-results.html",
@@ -188,6 +204,7 @@ def find_products():
                 concerns=concerns,
                 sensitivity="Not specified",
                 budget=budget,
+                preferred_brands=preferred_brands,
                 product_plan=recommended_products
             )
 
@@ -198,5 +215,9 @@ def find_products():
     )
 
 
+# ----------------------------------
+# RUN APPLICATION
+# ----------------------------------
+
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)

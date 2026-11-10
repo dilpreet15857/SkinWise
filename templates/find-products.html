@@ -32,8 +32,8 @@
             <h1>Find products that <em>love your skin.</em></h1>
 
             <p>
-                Tell us a little about your skin and your budget.
-                We'll find products that suit your needs.
+                Tell us a little about your skin, your favourite brands
+                and your budget. We'll find products that suit your needs.
             </p>
         </section>
 
@@ -42,7 +42,7 @@
             <div class="pf-form-heading">
                 <span class="pf-step">PERSONALISED PRODUCT FINDER</span>
                 <h2>Let's get to know your skin</h2>
-                <p>Just three quick details to get started.</p>
+                <p>Four quick steps to your personalised product list.</p>
             </div>
 
             {% if error %}
@@ -157,11 +157,74 @@
 
                 <div class="pf-divider"></div>
 
-                <!-- BUDGET -->
+                <!-- BRAND PREFERENCES -->
 
                 <div class="pf-question">
 
                     <span class="pf-number">03</span>
+
+                    <div class="pf-question-content">
+
+                        <h3>Do you have any favourite skincare brands?</h3>
+
+                        <p>
+                            Select the brands you'd like us to consider.
+                            You can choose more than one.
+                        </p>
+
+                        <div class="pf-concern-grid">
+
+                            <label class="pf-concern-option">
+                                <input
+                                    type="checkbox"
+                                    name="preferred_brands"
+                                    value="All Brands"
+                                    id="allBrands"
+                                    checked
+                                >
+                                <span>All Brands</span>
+                            </label>
+
+                            {% for brand in [
+                                "Dot & Key",
+                                "Minimalist",
+                                "Simple",
+                                "The Ordinary",
+                                "Laneige",
+                                "Foxtale",
+                                "Nivea"
+                            ] %}
+
+                                <label class="pf-concern-option">
+                                    <input
+                                        type="checkbox"
+                                        name="preferred_brands"
+                                        value="{{ brand }}"
+                                        class="brand-checkbox"
+                                    >
+                                    <span>{{ brand }}</span>
+                                </label>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <small class="pf-budget-note">
+                            Selecting All Brands gives you recommendations
+                            from every available brand. Leave it selected
+                            if you don't have a preference.
+                        </small>
+
+                    </div>
+                </div>
+
+                <div class="pf-divider"></div>
+
+                <!-- BUDGET -->
+
+                <div class="pf-question">
+
+                    <span class="pf-number">04</span>
 
                     <div class="pf-question-content">
 
@@ -206,6 +269,43 @@
         </section>
 
     </main>
+
+    <!-- BRAND SELECTION LOGIC -->
+
+    <script>
+        const allBrands = document.getElementById("allBrands");
+
+        const brandCheckboxes = document.querySelectorAll(
+            ".brand-checkbox"
+        );
+
+        allBrands.addEventListener("change", function () {
+            if (this.checked) {
+                brandCheckboxes.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+            }
+        });
+
+        brandCheckboxes.forEach(function (checkbox) {
+            checkbox.addEventListener("change", function () {
+
+                if (this.checked) {
+                    allBrands.checked = false;
+                }
+
+                const anyBrandSelected = Array.from(
+                    brandCheckboxes
+                ).some(function (item) {
+                    return item.checked;
+                });
+
+                if (!anyBrandSelected) {
+                    allBrands.checked = true;
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
