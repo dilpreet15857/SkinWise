@@ -162,6 +162,7 @@
         <div>
             <p class="pr-eyebrow">CURATED FOR YOUR SKIN</p>
             <h2>Your recommended products</h2>
+            <p class="section-description">These options are selected from the SkinWise catalogue using the skin type, concern, budget and brand preferences you entered. Product availability, formulas and prices can change, so check the seller's current listing and ingredient information before buying. A recommendation is not a guarantee that a product will suit every individual.</p>
         </div>
 
         <span class="pr-count">
@@ -336,6 +337,19 @@
         </div>
 
     </main>
+
+    <footer class="footer">
+        <a href="{{ url_for('home') }}" class="logo">skinwise<span>.</span></a>
+        <p>Understand your skin. Care for it thoughtfully.</p>
+        <div class="footer-links">
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>
+            <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
+            <a href="{{ url_for('terms') }}">Terms</a>
+        </div>
+        <span>© 2026 SkinWise. All rights reserved.</span>
+    </footer>
 
 </body>
 </html>

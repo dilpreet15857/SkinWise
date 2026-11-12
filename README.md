@@ -127,3 +127,13 @@ SkinWise provides general skincare information and product suggestions for educa
 - **Live Website:** https://skinwise-mla3.onrender.com/
 - **GitHub Repository:** https://github.com/dilpreet15857/SkinWise
 
+
+
+## AdSense and site transparency updates
+
+The site includes About, Contact, Privacy Policy, Disclaimer and Terms pages, plus original skincare education content on the homepage. Review each policy page against the services actually enabled on your deployment before publishing.
+
+### Render environment variable
+Set `CONTACT_EMAIL` to an email address that you actively monitor. The Contact page displays this address. Do not request another AdSense review until a real contact method is configured and the policy text has been checked.
+
+The robots and sitemap routes use the current Render hostname. If you move to a custom domain, update the hostname in `app.py`. These changes do not guarantee AdSense approval.

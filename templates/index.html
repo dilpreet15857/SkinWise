@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SkinWise | Your Skin, Your Story</title>
+    <title>SkinWise | Personalised Skincare Guidance</title>
+    <meta name="description" content="Understand your skin type, explore a simple skincare routine and discover product options matched to your skin concerns and budget with SkinWise.">
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -32,6 +33,7 @@
             <a href="{{ url_for('home') }}">Home</a>
             <a href="#about">Our Philosophy</a>
             <a href="#explore">Explore</a>
+            <a href="{{ url_for('about') }}">About</a>
         </nav>
 
        
@@ -205,6 +207,20 @@
 
     </main>
 
+        <section class="skinwise-guide" id="skincare-guide">
+            <div class="section-heading">
+                <div><p class="eyebrow">A LITTLE SKINCARE KNOWLEDGE</p><h2>Build your routine <span>with understanding.</span></h2></div>
+                <p>Good skincare does not need to be complicated. Learn what each step does and make choices that suit your skin.</p>
+            </div>
+            <div class="guide-grid">
+                <article class="guide-item"><span class="guide-number">01</span><h3>Cleanse gently</h3><p>A cleanser removes sweat, excess oil, sunscreen and everyday buildup. Choose a gentle formula that leaves your skin feeling comfortable rather than tight or stripped.</p></article>
+                <article class="guide-item"><span class="guide-number">02</span><h3>Choose treatments thoughtfully</h3><p>Serums and targeted ingredients can address particular concerns, but more products do not automatically mean better results. Introduce one new active product at a time and follow its directions.</p></article>
+                <article class="guide-item"><span class="guide-number">03</span><h3>Moisturise consistently</h3><p>Moisturisers help reduce water loss and support the skin barrier. Lightweight textures may suit some people, while richer creams can feel more comfortable on dry skin.</p></article>
+                <article class="guide-item"><span class="guide-number">04</span><h3>Protect your skin from the sun</h3><p>Broad-spectrum sunscreen helps protect exposed skin from UVA and UVB rays. Follow the product label, apply enough, and reapply as directed, especially after swimming or sweating.</p></article>
+            </div>
+            <div class="guide-note"><h3>There is no one-size-fits-all routine.</h3><p>Skin can respond differently to the same product. Patch test new products, avoid introducing several active ingredients at once, and stop using a product that causes persistent irritation. If you have a skin condition or ongoing symptoms, seek advice from a qualified healthcare professional.</p></div>
+        </section>
+
  <!-- PHILOSOPHY SECTION -->
 <section class="philosophy" id="about">
 
@@ -246,7 +262,11 @@
         </a>
 
         <p>Understand your skin. Care for it thoughtfully.</p>
-
+        <div class="footer-links">
+            <a href="{{ url_for('about') }}">About Us</a><a href="{{ url_for('contact') }}">Contact</a>
+            <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a><a href="{{ url_for('disclaimer') }}">Disclaimer</a>
+            <a href="{{ url_for('terms') }}">Terms</a>
+        </div>
         <span>© 2026 SkinWise. All rights reserved.</span>
     </footer>
 

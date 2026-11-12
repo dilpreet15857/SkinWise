@@ -35,6 +35,47 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html", contact_email=os.environ.get("CONTACT_EMAIL", "").strip())
+
+
+@app.route("/privacy-policy")
+def privacy_policy():
+    return render_template("privacy-policy.html")
+
+
+@app.route("/disclaimer")
+def disclaimer():
+    return render_template("disclaimer.html")
+
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+
+@app.route("/robots.txt")
+def robots():
+    from flask import Response
+    body = "User-agent: *\nAllow: /\nSitemap: https://skinwise-mla3.onrender.com/sitemap.xml\n"
+    return Response(body, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    from flask import Response
+    pages = ["", "about", "contact", "privacy-policy", "disclaimer", "terms"]
+    urls = "".join(f"<url><loc>https://skinwise-mla3.onrender.com/{page}</loc></url>" for page in pages)
+    xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + urls + '</urlset>'
+    return Response(xml, mimetype="application/xml")
+
+
 # ----------------------------------
 # KNOW YOUR SKIN ASSESSMENT
 # ----------------------------------
@@ -64,10 +105,14 @@ def assessment():
 
         session["skin_type"] = skin_type
 
-        return render_template(
-            "skin-result.html",
-            skin_type=skin_type
-        )
+        skin_type_details = {
+            "Normal": "Normal skin often feels comfortable and balanced, with neither persistent oiliness nor dryness. Keep the routine gentle and consistent.",
+            "Oily": "Oily skin may produce more sebum and can look shiny, especially through the T-zone. Lightweight, non-comedogenic products may feel more comfortable.",
+            "Dry": "Dry skin can feel tight, rough or flaky. Gentle cleansing and a moisturiser that supports the skin barrier can help reduce that feeling.",
+            "Combination": "Combination skin commonly has more oil through the forehead, nose and chin, while the cheeks may feel normal or dry. You may prefer to adjust product textures across different areas."
+        }
+        return render_template("skin-result.html", skin_type=skin_type,
+                               skin_type_details=skin_type_details[skin_type])
 
     return render_template("assessment.html")
 
